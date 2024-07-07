@@ -17,7 +17,6 @@ db.init_app(app)
 
 ma = Marshmallow(app)
 
-
 class NewsletterSchema(ma.SQLAlchemySchema):
 
     class Meta:
@@ -26,6 +25,7 @@ class NewsletterSchema(ma.SQLAlchemySchema):
 
     title = ma.auto_field()
     published_at = ma.auto_field()
+
 
     url = ma.Hyperlinks(
         {
@@ -44,11 +44,11 @@ api = Api(app)
 class Index(Resource):
 
     def get(self):
-        
+
         response_dict = {
             "index": "Welcome to the Newsletter RESTful API",
         }
-        
+
         response = make_response(
             response_dict,
             200,
@@ -72,7 +72,7 @@ class Newsletters(Resource):
         return response
 
     def post(self):
-        
+
         new_newsletter = Newsletter(
             title=request.form['title'],
             body=request.form['body'],
@@ -80,8 +80,6 @@ class Newsletters(Resource):
 
         db.session.add(new_newsletter)
         db.session.commit()
-
-    
 
         response = make_response(
             newsletter_schema.dump(new_newsletter),
